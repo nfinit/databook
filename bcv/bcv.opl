@@ -1,0 +1,27 @@
+BCV:(T)
+    LOCAL LOGT
+    LOCAL A,B,C,D,E,F
+    LOGT=LOG(T)
+    IF LOGT<3.7
+        A=−0.1905372915E5
+        B= 0.1551448668E5
+        C=−0.4212788193E4
+        D= 0.3814763284E3
+        RETURN A+(B*LOGT)+(C*LOGT**2)+(D*LOGT**3)
+    ELSEIF LOGT<3.9
+        A=-0.3705102038E5
+        B= 0.3856726299E5
+        C=-0.1506514863E5
+        D= 0.2617246371E4
+        E=-0.1706238103E3
+        RETURN A+(B*LOGT)+(C*LOGT**2)+(D*LOGT**3)+(E*LOGT**4)
+    ELSE
+        A=-0.1181154505E6
+        B= 0.1371459736E6
+        C=-0.6362338121E5
+        D= 0.1474129236E5
+        E=-0.1705872784E4
+        F= 0.7887317218E2
+        RETURN A+(B*LOGT)+(C*LOGT**2)+(D*LOGT**3)+(E*LOGT**4)+(F*LOGT**5)
+    ENDIF
+    RETURN 0.0
