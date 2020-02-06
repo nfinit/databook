@@ -8,7 +8,7 @@
 /* Bolometric correction coefficients for log Teff < 3.70 */
 #define BCA1 -0.190537291496456E+05
 #define BCB1  0.155144866764412E+05
-#define BCC1 -0.421278819301717E+05
+#define BCC1 -0.421278819301717E+04
 #define BCD1  0.381476328422343E+03
 
 /* Bolometric correction coefficients for log Teff < 3.90 */
