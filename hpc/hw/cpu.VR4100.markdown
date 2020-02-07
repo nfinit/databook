@@ -11,19 +11,6 @@ like PDAs and embedded appliances, and also include a host of integrated
 peripherals on-chip catering heavily to the Windows CE platform and similar PDA
 applications, such as keyboard, LCD and touch digitizer controllers.
 
-The VR4100 family of microprocessors was developed and introduced by NEC in 1996
-as a cornerstone of Microsoft's new Windows CE Handheld PC reference platform,
-and perhaps also as a response to the announcement of the MIPS16 instruction set
-supported by all VR4100 implementations alongside the traditional MIPS III ISA.
-Designed from the ground up for handheld computing, VR4100 designs were
-immensely popular in PDAs and other mobile devices prior to Microsoft's decision
-to standardize the Pocket PC platform on the ARM architecture in the early 2000s
-and the VR4100's subsequent shift of focus to network appliances and similar
-high-end embedded roles. All VR4100 designs include a host of on-chip
-peripherals catering heavily to the basic Handheld PC specification, sporting
-keyboard, LCD, touch digitizer and IrDA communications controllers as standard
-on-chip features.
-
 Most resources on the web tend to mislabel VR4100 series chips as "MIPS R4000"
 due to their shared instruction set and mutual compatibility, however the
 VR4100 is an entirely indigenous design that differs significantly from the
