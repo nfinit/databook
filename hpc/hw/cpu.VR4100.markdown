@@ -40,6 +40,6 @@ In full compliance with the MIPS III instruction set, all VR4100 designs are
 internally 64-bit, with 32-bit external data and address buses to reduce system
 complexity and cost of implementation. Although any VR4100 core can theoretically 
 address up to 4 GiB of memory, in practice they are significantly limited by 
-their accompanying on-die memory controller to a much smaller amount, the VR4101 
+their accompanying on-die memory controller to a much smaller amount; the VR4101 
 only able to address up to 8 MiB, while the later VR4121 could address up to 64 
 MiB.
