@@ -1,27 +1,27 @@
-Overview of Handheld PC Microprocessors and Architectures
+Handheld PC Architecture
 --------------------------------------------------------------------------------
 With the Handheld PC, Microsoft and its affiliates looked to the future and
 elected to standardize on a variety of modern 32-bit RISCs rather than continue
 to use the aging embedded derivatives of Intel's 8086 and 80386 that were
 otherwise common in handheld and embedded computers at the time. To this end,
 the HPC ultimately used a trio of architectures; the pioneering MIPS ISA,
-Hitachi's innovative SuperH, and later the rapidly growing ARM architecture,
-which would eventually usurp all of its competitors towards the end of the
-HPC's brief but influential tenure in the consumer market when Microsoft
-standardized on it exclusively in the early 2000s.
+Hitachi's innovative SuperH, and later the rapidly growing, lightning fast
+ARM architecture, which would eventually usurp all of its competitors towards 
+the end of the HPC's brief but influential tenure in the consumer market when 
+Microsoft standardized on it exclusively in the early 2000s.
 
 While Handheld PCs and similar devices made use of standard, off-the-shelf
 architectures and platforms, these were generally implemented in ways unique
 to the HPC/PDA world, with specific lines of CPUs such as NEC's VR4100 family
 of MIPS application processors or Hitachi's competing SH7700 series. Some
-vendors, such as Philips, even went as far as to develop their own designs
-entirely.
+vendors, such as Philips, even went as far as to develop their own unique
+designs.
 
 This article serves as an overview of the various major families of CPUs
 employed in the Handheld PC platform, covering mostly the MIPS, SuperH and
 ARM architectures most commonly used in these devices.
 
-## MIPS microprocessors
+## MIPS systems
 
 The established MIPS architecture was a mainstay in HPCs and other PDAs as
 much as it was in workstations and high-performance computing throughout
@@ -63,12 +63,11 @@ in shared-memory multiprocessing configurations.
 *Above: table of VR4100 series products*
 
 The VR4100 series was first introduced with the VR4101 in August 1996, which
-powered NEC's (and the world's) first Windows CE devices alongside the
-SuperH-driven Cassiopeia series from Casio. Last to be used in PDAs were the 
+powered NEC's first Windows CE devices. Last to be used in PDAs were the 
 VR4121 and VR4122, with their successors in the VR413x family shifting the
-VR4100's focus toward network appliances and similar highly embedded roles
-in light of Microsoft's decision to standardize the Windows CE PDA platform
-on the ARM architecture starting with Pocket PC 2002.
+VR4100's focus toward network appliances and similar embedded roles in light 
+of Microsoft's decision to standardize the Windows CE PDA platform on the ARM 
+architecture starting with Pocket PC 2002.
 
 ### Toshiba TX39 series
 
