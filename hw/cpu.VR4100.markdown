@@ -10,7 +10,7 @@ venerable MIPS R4000, the VR4100 is an entirely novel and indigenous design,
 emphasizing energy efficiency and cost-effective implementation in small devices
 over raw performance.
 
-## Architecture
+### Architecture
 
 All members of the VR4100 family implement a classic five-stage pipeline design
 closer to that of the older R3000 and R2000 than the 8-stage superpipelined 
@@ -29,7 +29,8 @@ their accompanying on-die memory controller to a much smaller amount; the VR4101
 only able to address up to 8 MiB, while the later VR4121 could address up to 64 
 MiB.
 
-*Table of VR4100 series products*           
+### Implementations
+
 | Model  | Year | Core    | Caches (I+D)     | Rated Frequency | Process    |
 |--------|------|---------|------------------|-----------------|------------|
 | VR4101 | 1996 | VR4100  | 2 KiB  +  1 KiB  |   33        MHz | 350 nm     |
