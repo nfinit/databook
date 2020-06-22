@@ -39,9 +39,7 @@ powerhouse of the R4000.
 | VR4131 | 2001 | VR4130  | 16 KiB + 16 KiB  |   200       MHz | 130 nm UX4 |
 | VR4133 | 2002 | VR4130  | 16 KiB + 16 KiB  |   266       MHz | 130 nm UX4 |
 
-Active development on the VR4100 family continued for around 6 years, from 
-the original 33 MHz VR4101 of 1996 to the 266 MHz VR4133 of 2002. Through
-this period, the core architecture stayed mostly the same barring occasional
-instruction set enhancements and process shrinks, with most other innovation
-occurring in the cache memories and peripherals attached to the core. 
-
+Active development on the VR4100 family began in 1995 with the 33 MHz VR4101
+and ended with the 266 MHz VR4133 in 2002, through these 7 years the fundamental
+design stayed the same with most innovation being focused on the manufacturing
+process and peripheral sets, which improved significantly with each generation.
