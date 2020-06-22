@@ -33,8 +33,8 @@ MiB.
 
 | Model  | Year | Core    | Caches (I+D)     | Rated Frequency | Process    |
 |--------|------|---------|------------------|-----------------|------------|
-| VR4101 | 1996 | VR4100  | 2 KiB  +  1 KiB  |   33        MHz | 350 nm     |
-| VR4102 | 1997 | VR4100  | 4 KiB  +  1 KiB  |   66        MHz | 350 nm     |
+| VR4101 | 1996 | VR4100  | 2 KiB  +  1 KiB  |   33        MHz | 350 nm UC1 |
+| VR4102 | 1997 | VR4100  | 4 KiB  +  1 KiB  |   66        MHz | 350 nm UC1 |
 | VR4111 | 1998 | VR4110  | 16 KiB +  8 KiB  |   80  - 100 MHz | 250 nm UC2 |
 | VR4181 | 1998 | VR4110  | 4  KiB +  4 KiB  |   66        MHz | 250 nm UC2 |
 | VR4121 | 1999 | VR4120  | 16 KiB +  8 KiB  |   131 - 168 MHz | 250 nm UR2 |
