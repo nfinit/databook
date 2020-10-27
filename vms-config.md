@@ -54,7 +54,6 @@ RUN AUTHORIZE
 
 ```
 
-You can also save a line by simply typing `RUN SYS$SYSTEM:AUTHORIZE`. 
 If successful, you should see a `UAF>` prompt.
 
 #### Disabling special accounts
@@ -101,8 +100,26 @@ being *limits* and *quotas*. All accounts have these 16 limits and quotas:
 | WSQUOTA     | Working set quota limit                        | 512 pages     |
 
 The parameters of these quotas can be modified using the `AUTHORIZE` program.
-In particular, we will want to adjust these values for `SYSTEM` and `DEFAULT`,
-mainly to allow for the installation of certain demanding software packages.
+In particular, we will want to adjust these values for the `SYSTEM` super-user,
+to allow for the installation of certain demanding software packages.
+
+For `SYSTEM`, we'll make the following limit and quota adjustments:
+
+| Quota       | Value  |
+|-------------|--------|
+| ASTLM       | 150    |
+| BIOLM       | 150    |
+| BYTLM       | 131072 |
+| DIOLM       | 120    |
+| ENQLM       | 32767  |
+| FILLM       | 500    |
+| PRCLM       | 50     |
+| TQELM       | 50     |
+| PGFLQUOTA   | 32768  |
+
+Some of these limits have been raised significantly, but as HUDSON is expected
+to have very low overall system load given its use case, it is not likely they 
+will interfere with regular users.
 
 --------------------------------------------------------------------------------
 
@@ -133,7 +150,6 @@ following licenses will be needed prior to installing the remaining software:
 | PCA                      | Performance and Coverage Analyzer                 |
 | DTM                      | Test Manager                                      | 
 | FMS                      | VAX Forms Management System                       |
-| DEEX                     | VAX Decision Expert                               |
 | RDB                      | DEC Rdb database management system                |
 | FORMS                    | DECforms (full/development)                       |
 | NOTES                    | DEC Notes conferencing system                     |
