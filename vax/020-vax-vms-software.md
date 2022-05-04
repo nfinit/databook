@@ -5,15 +5,12 @@ Given the nature and relative rarity of the VAX, it's reasonable to assume that
 software is generally unobtainable. This is true, at least to the extent that it
 would be in the PC world; standalone, third-party commercial software for the 
 VAX is difficult for most novice users to find in the wild today. 
-
 But luckily, you don't need it. 
-Why?
-
-Because as it is on so many other large systems, much of the best VAX software 
-came from DEC themselves, who regularly published collections of it in the form 
-of *Consolidated Software Distributions* hosting everything from system 
-utilities to compilers to fully fledged applications. "Condists" are plentiful
-online in places like the Internet Archive.
+Why? Because as it is on so many other large systems, much of the best VAX 
+software products are first-party from DEC themselves, who regularly published 
+collections of it in the form of *Consolidated Software Distributions* hosting 
+everything from system utilities to compilers to fully fledged applications. 
+"Condists" are plentiful online in places like the Internet Archive.
 
 This page mostly covers installing software from condist CDs, which have their
 own interactive menus and scripts. Third-party software installation methods
