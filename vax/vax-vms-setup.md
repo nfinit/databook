@@ -1,25 +1,83 @@
-NTS OpenVMS VAX Configuration Notes
+Installing VMS on your VAX
 --------------------------------------------------------------------------------
 
-### Initial boot and OpenVMS installation
+### Preparation
 
-After booting from `DKA400`, the following command will begin restoring the 
-OpenVMS installation save set to the disk:
+The VAX/VMS installation process is guided and generally straightforward, but
+before starting it will be helpful to prepare with a few things:
+* The name of your installation device (CD-ROM, tape, etc.)
+* The name of your target device to which VMS will be installed (hard disk)
+* A *maximum* six character long hostname that will be used to identify the VAX
+* *If installing TCP/IP services*: a static IP address you intend to assign to
+  the VAX on your network
+* A DECnet address consisting of an area number and a node number. DECnet
+  addressing supports an area number range of 1-63 and a node range of 1-1023.
+  If you are installing TCP/IP on your VAX, it's recommended to also use the 
+  last octet of its static IP as its DECnet node number.
+* A system ID computed from the DECnet address using the formula `A * 1024 + N`
+  where `A` and `N` correspond to DECnet area and node numbers, respectively.
+
+For the VAX used in this example, we will use the following parameters:
+
+| Attribute           | Value       |
+|---------------------|-------------|
+| Installation device | `DKA400`    |
+| Target device       | `DKA100`    |
+| Hostname            | `NASHUA`    |
+| TCP/IP address      | `10.0.0.40` |
+| DECnet address      | `1.40`      |
+| System ID           | `1064`      |
+
+### Initial boot
+
+After booting your VAX, the display or console should show a boot message,
+usually the CPU type (in our case `KA48`) followed by self-test information.
+Issue a **break** at this point and you will soon be dropped into the console,
+with a `>>>` prompt showing on the screen.
+
+From here, you can now find the boot device hosting the VMS install media by
+issuing the command:
+
+`                                SHOW DEVICE                                   `
+
+...after which a table will be displayed of currently connected devices,
+most importantly their names and types. Our VAX has an attached RRD42 CD-ROM
+drive with the label `DKA400` and type `RODISK` that we will be booting from.
+
+Now that we have determined `DKA400` to be our boot device, we can boot from
+it by issuing the command:
+
+`                                BOOT DKA400                                   `
+
+...which will start booting the VMS image from the disk. 
+
+### Installing VMS
+
+Although I mentioned the VMS installation process is generally easy, that's not
+to say it isn't *different*. The CDs themselves do not have any kind of guided
+installer, but rather a *backup image* of a fresh VMS installation loaded on
+them and an extremely lightweight copy of VMS with just the bare minimum of
+tools needed to restore it. As such, once the CD boots you will be dumped into
+a command prompt, from which you only need to run the following command:
 
 `                   BACKUP DKA400:VMS061.B/SAVE_SET DKA100:                    `
 
-After restoration is complete, reboot the system from `DKA100`.
+...which kicks off the backup restore process in an automated fashion. Once it
+is complete, reboot the system. Depending on the state of your VAX and how you
+booted it from the installation CD immediately, you may need to re-enter the
+console and change or otherwise manually boot from the hard disk. Our VAX
+hard disk is `DKA100`.
 
-After booting, the system will begin the installation process by asking
-for a label for the system volume it's worthwhile to give your system a unique 
-volume label if you would like to configure it as part of a cluster. For HUDSON,
-the *volume label* is `HUDSON$SYS`.
+After booting the newly imaged hard disk, the system will begin the installation 
+process by asking for a label for the system volume it's worthwhile to give your 
+system a unique volume label if you would like to configure it as part of a 
+cluster. For NASHUA, the *volume label* is `NASHUA$SYS`.
 
 The system will then ask for the name of the drive hosting the distribution
-media, in HUDSON's case this is `DKA400`. The media is ready to be mounted.
+media, in NASHUA's case this is `DKA400`. The media is ready to be mounted.
 
 For optional software, select all options *except* DECwindows support; as
-HUDSON is running in a headless configuration, a graphical environment is
+NASHUA is running in a headless configuration, a graphical environment is
 unneeded. After a few confirmation steps, the system will begin installing 
 the selected options.
 
@@ -29,12 +87,12 @@ for at least `SYSTEM`, the other accounts can then be given randomized passwords
 as they will be disabled when setup is complete.
 
 The system will now begin setting up DECnet starting by asking for the SCSNODE
-name, which in this case is `HUDSON`. SCSNODE names can be only six characters
+name, which in this case is `NASHUA`. SCSNODE names can be only six characters
 long.
 
-Setup then asks for an SCSSYSTEMID, which for HUDSON is `1064`. This is
+Setup then asks for an SCSSYSTEMID, which for NASHUA is `1064`. This is
 calculated from the formula `A * 1024 + N`, where A is the DECnet area and
-N is the DECnet node number. For HUDSON we have chosen area `1` and the
+N is the DECnet node number. For NASHUA we have chosen area `1` and the
 last octet of the system's static IP address as the node number, `40`.
 
 Finally, enter the system time zone information to complete the setup process.
@@ -117,7 +175,7 @@ For `SYSTEM`, we'll make the following limit and quota adjustments:
 | TQELM       | 50     |
 | PGFLQUOTA   | 32768  |
 
-Some of these limits have been raised significantly, but as HUDSON is expected
+Some of these limits have been raised significantly, but as NASHUA is expected
 to have very low overall system load given its use case, it is not likely they 
 will interfere with regular users.
 
@@ -125,7 +183,7 @@ will interfere with regular users.
 
 ### Software stack and license loading
 
-HUDSON features a rich software environment for terminal-driven computing with
+NASHUA features a rich software environment for terminal-driven computing with
 many productivity and development tools, each of which must be licensed. The
 following licenses will be needed prior to installing the remaining software:
 
