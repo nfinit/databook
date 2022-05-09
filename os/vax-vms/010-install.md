@@ -1,4 +1,4 @@
-Installing VMS on your VAX
+Installing VAX/VMS 5.5
 --------------------------------------------------------------------------------
 
 ### Preparation
