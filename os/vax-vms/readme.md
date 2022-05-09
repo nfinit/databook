@@ -4,10 +4,11 @@ VAX/VMS operating system
 **VAX/VMS** - the VAX Virtual Memory System, was the primary operating system
 used on the legendary VAX family of minicomputers produced by Digital Equipment
 Corporation from the late 1970s through the late 1990s, also available on later 
-Alpha, Itanium and now x86 systems. Though VMS is a marginal system today, it
-was nonetheless hugely influential on modern computing, especially Windows NT,
-and today presents a familiar yet deeply alien environment to challenge
-hobbyists and professionals alike.
+Alpha, Itanium and now x86 systems. VMS is directly influenced by and serves as
+a successor to the RSX operating system of the PDP-11, and while it is a marginal 
+system today, it was nonetheless hugely influential on modern computing, 
+especially Windows NT, and today presents a familiar yet deeply alien environment 
+to challenge hobbyists and professionals alike.
 
 This loosely organized collection of working notes on running VMS systems is
 written from a completely novice perspective for personal use and may not
