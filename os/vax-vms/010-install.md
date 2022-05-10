@@ -1,54 +1,64 @@
 Installing VAX/VMS 5.5
 --------------------------------------------------------------------------------
 
+This guide covers a basic installation of VAX/VMS 5.5, the last VAX-only version
+of VMS contemporary to the last and fastest generation of VAX systems produced
+before the platform was eclipsed by the new Alpha RISC machines to which VMS
+was soon ported. VMS 5.x, rather than being historically "proper" for many
+of the more desirable VAXen among hobbyists, also has a rather rich base
+of first-party software available, making it a reasonable choice.
+
 ### Preparation
 
 The VAX/VMS installation process is guided and generally straightforward, but
-before starting it will be helpful to prepare with a few things:
+before starting, you will need to know a few things about your system:
 * The name of your installation device (CD-ROM, tape, etc.)
 * The name of your target device to which VMS will be installed (hard disk)
 * A *maximum* six character long hostname that will be used to identify the VAX
-* *If installing TCP/IP services*: a static IP address you intend to assign to
-  the VAX on your network
-* A DECnet address consisting of an area number and a node number. DECnet
-  addressing supports an area number range of 1-63 and a node range of 1-1023.
-  If you are installing TCP/IP on your VAX, it's recommended to also use the 
-  last octet of its static IP as its DECnet node number.
-* A system ID computed from the DECnet address using the formula `A * 1024 + N`
-  where `A` and `N` correspond to DECnet area and node numbers, respectively.
 
-For the VAX used in this example, we will use the following parameters:
+For our simulated VAXstation 4000 VLC, we use the following parameters:
 
 | Attribute           | Value       |
 |---------------------|-------------|
 | Installation device | `DKA100`    |
 | Target device       | `DKA0`      |
 | Hostname            | `BOSTON`    |
-| TCP/IP address      | `10.0.0.40` |
-| DECnet address      | `1.40`      |
-| System ID           | `1064`      |
 
 ### Initial boot
 
-After booting your VAX, the display or console should show a boot message,
-usually the CPU type (in our case `KA48`) followed by self-test information.
-Issue a **break** at this point and you will soon be dropped into the console,
-with a `>>>` prompt showing on the screen.
+After booting the VAX, the display/console will show a boot string:
+```
+KA48-A V1.2-32B-V4.0
+```
+And begin a long memory test. During this process, issue a **break** and
+you will soon be dropped into the console, with a `>>>` prompt showing on 
+the screen.
 
 From here, you can now find the boot device hosting the VMS install media by
 issuing the command:
+```
+SHOW DEVICE
+```
+...after which a table will be displayed of currently connected devices:
+```
+  VMS/VMB      ADDR      DEVTYPE    NUMBYTES     RM/FX    WP    DEVNAM      REV
+  -------      ----      -------    --------     -----    --    ------      ---
+  ESA0         08-00-2B-A6-72-6F
+  DKA0         A/0/0     DISK       219.15MB      FX            RZ24        4041
+  DKA100       A/1/0     RODISK     205.50MB      RM      WP    RRD40       250D
+  DKA200       A/2/0     RODISK     623.25MB      RM      WP    RRD40       250D
+  DKA300       A/3/0     RODISK     623.25MB      RM      WP    RRD40       250D
+  DKA400       A/4/0     RODISK     650.30MB      RM      WP    RRD40       250D
+  DKA500       A/5/0     RODISK     623.25MB      RM      WP    RRD40       250D
+ ..HostID..    A/6       INITR
+```
 
-`                                SHOW DEVICE                                   `
-
-...after which a table will be displayed of currently connected devices,
-most importantly their names and types. Our VAX has an attached RRD42 CD-ROM
-drive with the label `DKA100` and type `RODISK` that we will be booting from.
-
-Now that we have determined `DKA100` to be our boot device, we can boot from
-it by issuing the command:
-
-`                                BOOT DKA100                                   `
-
+On this table, RZ24 disk `DKA0` appears to be our target disk while, of a number of
+connected RRD40 CD-ROM drives, `DKA100` hosts our installation media. We can now
+boot from it with the command:
+```
+BOOT DKA100
+```
 ...which will start booting the VMS image from the disk. 
 
 ### Installing VMS
@@ -72,9 +82,9 @@ save sets from personal experience tend to take the form
 `VMS2H4055.B` while OpenVMS 6.1, which has no suffix, would simply be 
 `VMS061.B`. We're installing the former version on our system, so we'll issue
 the command:
-
-`                   BACKUP DKA100:VMS061.B/SAVE_SET DKA0:                      `
-
+```
+BACKUP DKA100:VMS2H4055.B/SAVE_SET DKA0:
+```
 ...which kicks off the backup restore process in an automated fashion. Once it
 is complete, reboot the system. Depending on the state of your VAX and how you
 booted it from the installation CD immediately, you may need to re-enter the
@@ -112,53 +122,114 @@ Finally, the system will reboot.
 
 --------------------------------------------------------------------------------
 
-*This section is currently orphaned as this page is being rewritten with an
-older version of VMS (5.5-2H4)*
+## Setting up the system
 
-The system will now begin setting up DECnet starting by asking for the SCSNODE
-name, which in this case is `BOSTON`. SCSNODE names can be only six characters
-long.
+Our post-installation boot of VAX/VMS will look a lot like this:
 
-Setup then asks for an SCSSYSTEMID, which for BOSTON is `1064`. This is
-calculated from the formula `A * 1024 + N`, where A is the DECnet area and
-N is the DECnet node number. For BOSTON we have chosen area `1` and the
-last octet of the system's static IP address as the node number, `40`.
+```
+-DKA0
+   VAX/VMS Version V5.5-2H4 Major version id = 1 Minor version id = 0
 
-Finally, enter the system time zone information to complete the setup process.
 
---------------------------------------------------------------------------------
+    ***************************************************************
 
-### Basic system setup
+    VAX/VMS V5.5-2H4
 
-After installing the base system, it is recommended to perform some account
-maintenance, this can be performed using the `AUTHORIZE` utility that can be
-invoked with the following commands:
+    You have SUCCESSFULLY installed the VMS operating system.
 
-```DCL   
+    The system is now executing the STARTUP procedure.  Please
+    wait for the completion of STARTUP before logging in to the
+    system.
 
-SET DEFAULT SYS$SYSTEM
-RUN AUTHORIZE 
+    ***************************************************************
+
+%STDRV-I-STARTUP, VMS startup begun at 10-MAY-2022 12:42:24.56
+
+The VAX/VMS system is now executing the system startup procedure.
+
+%%%%%%%%%%%  OPCOM  10-MAY-2022 12:42:36.18  %%%%%%%%%%%
+Operator _OPA0: has been enabled, username SYSTEM
+
+%%%%%%%%%%%  OPCOM  10-MAY-2022 12:42:36.18  %%%%%%%%%%%
+Operator status for operator _OPA0:
+CENTRAL, PRINTER, TAPES, DISKS, DEVICES, CARDS, NETWORK, CLUSTER, SECURITY,
+LICENSE, OPER1, OPER2, OPER3, OPER4, OPER5, OPER6, OPER7, OPER8, OPER9, OPER10,
+OPER11, OPER12
+
+%%%%%%%%%%%  OPCOM  10-MAY-2022 12:42:36.20  %%%%%%%%%%%
+Logfile has been initialized by operator _OPA0:
+Logfile is SYS$SYSROOT:[SYSMGR]OPERATOR.LOG;1
+
+%%%%%%%%%%%  OPCOM  10-MAY-2022 12:42:36.20  %%%%%%%%%%%
+Operator status for operator SYS$SYSROOT:[SYSMGR]OPERATOR.LOG;1
+CENTRAL, PRINTER, TAPES, DISKS, DEVICES, CARDS, NETWORK, CLUSTER, SECURITY,
+LICENSE, OPER1, OPER2, OPER3, OPER4, OPER5, OPER6, OPER7, OPER8, OPER9, OPER10,
+OPER11, OPER12
+
+%%%%%%%%%%%  OPCOM  10-MAY-2022 12:42:36.37  %%%%%%%%%%%
+Message from user AUDIT$SERVER
+Security alarm (SECURITY) and security audit (SECURITY), system id: 65534
+Auditable event:        Audit server starting up
+Event time:             10-MAY-2022 12:42:36.35
+
+%SET-I-NEWAUDSRV, identification of new audit server process is 00000108
+%%%%%%%%%%%  OPCOM  10-MAY-2022 12:42:36.48  %%%%%%%%%%%
+Message from user JOB_CONTROL
+%JBC-E-OPENERR, error opening SYS$COMMON:[SYSEXE]QMAN$MASTER.DAT;
+
+%%%%%%%%%%%  OPCOM  10-MAY-2022 12:42:36.48  %%%%%%%%%%%
+Message from user JOB_CONTROL
+-RMS-E-FNF, file not found
+
+%LICENSE-F-EMTLDB, license database contains no license records
+%%%%%%%%%%%  OPCOM  10-MAY-2022 12:42:38.75  %%%%%%%%%%%
+Message from user SYSTEM
+%LICENSE-E-NOAUTH, DEC VAX-VMS use is not authorized on this node
+-LICENSE-F-NOLICENSE, no license is active for this software product
+-LICENSE-I-SYSMGR, please see your system manager
+
+
+%LICENSE-E-NOAUTH, DEC VAX-VMS use is not authorized on this node
+-LICENSE-F-NOLICENSE, no license is active for this software product
+-LICENSE-I-SYSMGR, please see your system manager
+Startup processing continuing...
+
+%%%%%%%%%%%  OPCOM  10-MAY-2022 12:42:38.82  %%%%%%%%%%%
+Message from user SYSTEM
+Warning: DECdtm log file not found (SYS$JOURNAL:SYSTEM$.LM$JOURNAL)
+        %RMS-E-FNF, file not found
+        TP server process waiting
+
+
+
+The VAX/VMS system is now executing the site-specific startup commands.
+
+%SET-I-INTSET, login interactive limit = 64, current interactive value = 0
+  10-MAY-2022 12:42:39
+  SYSTEM       job terminated at 10-MAY-2022 12:42:41.10
+
+  Accounting information:
+  Buffered I/O count:            1214         Peak working set size:     807
+  Direct I/O count:               582         Peak page file size:      3344
+  Page faults:                   3882         Mounted volumes:             0
+  Charged CPU time:           0 00:00:02.19   Elapsed time:     0 00:00:17.02
 
 ```
 
-If successful, you should see a `UAF>` prompt.
-
-#### Disabling special accounts
-
-The first step involves disabling the accounts `SYSTEST` and `FIELD`,
-which are special accounts intended to be used for verifying an OpenVMS
-installation with the User Environment Test Package or for access by field
-representatives, respectively. Since neither case applies much to a home
-hobbyist-maintained system or a platform that has not been supported since
-2013, these accounts can be safely disabled by applying the `DISUSER` flag
-with the following command sequence:
-
-```UAF
-
-MODIFY SYSTEST/FLAGS=DISUSER
-MODIFY FIELD/FLAGS=DISUSER
+There are a few errors to resolve, but of primary interest to start are
+the licensing-related messages
 
 ```
+%LICENSE-F-EMTLDB, license database contains no license records
+%%%%%%%%%%%  OPCOM  10-MAY-2022 12:42:38.75  %%%%%%%%%%%
+Message from user SYSTEM
+%LICENSE-E-NOAUTH, DEC VAX-VMS use is not authorized on this node
+-LICENSE-F-NOLICENSE, no license is active for this software product
+-LICENSE-I-SYSMGR, please see your system manager
+```
+
+With this in mind, log on to the `SYSTEM` account using the new password
+you gave it and begin our first step...
 
 ### Licensing your system
 
@@ -186,33 +257,142 @@ system for free, though it's unfortunately quite complicated for
 the VAX, as the latest of VMS' developers, VMS Software Inc, is
 no longer able to issue VAX software licenses for VMS or any
 former first-party Digital products. To this end, one will have
-to turn to grey area solutions such as the VLF for PAKs.
+to turn to grey area solutions if they are unable to acquire PAKs
+in any other way.
 
 #### Loading licenses
 
-For a fresh installation of VAX/VMS, a handful of licenses will be
-needed for the operating system itself, as well as DECnet and
-TCP/IP services (if installing) for networking. These licenses
-have product codes of `VAX-VMS`, `DVNETEND` and `UCX`, respectively,
-all with producer code `DEC`.
+For our freshly installed VAX/VMS system, we will need to load
+a license for `VAX-VMS`, produced by `DEC`.
 
-Once you have valid PAKs on hand, you must first register them
-into the database before loading, which can be done with the
-`LICENSE` utility:
+Once you have a valid PAK on hand, obtained or 
+[generated](../../prog/c/pakgen.c), you must first register it
+into the database, which can be done with the `LICENSE` utility:
 
 ```DCL
-
-$ LICENSE REGISTER <product code> /PRODUCER=<producer code> /CHECKSUM=<checksum>
-
+LICENSE REGISTER <product code> /PRODUCER=<producer code> /CHECKSUM=<checksum>
 ```
 
 Once you have performed this action for all needed products,
 simply load them with the command:
 
 ```DCL
-
-$ LICENSE LOAD <product code>
-
+LICENSE LOAD <product code>
 ```
 
 After all licenses are registered and loaded, reboot VMS, and you will now have a fully functional system.
+
+### Disabling unused accounts
+
+Next, we should secure the machine a little bit by disabling the unnecessary accounts `SYSTEST` 
+and `FIELD` which are intended for field service and advanced system testing, neither of which
+neatly apply to a modern-day hobbyist system. To do this we will have to use the `AUTHORIZE` utility 
+to edit the User Authorization File. The utility is located in the `SYS$SYSTEM` directory and can be 
+invoked with the following commands:
+
+```DCL   
+
+SET DEFAULT SYS$SYSTEM
+RUN AUTHORIZE 
+
+```
+
+If successful, you should see a `UAF>` prompt.
+
+From here, we will modify the UAF records of these accounts to set the `DISUSER` flag to prevent
+logins with their credentials:
+
+```UAF
+
+MODIFY SYSTEST/FLAGS=DISUSER
+MODIFY FIELD/FLAGS=DISUSER
+
+```
+As you perform these tasks, you will see OPCOM messages noting the record modification:
+
+```
+%%%%%%%%%%%  OPCOM  10-MAY-2022 13:25:15.50  %%%%%%%%%%%
+Message from user AUDIT$SERVER
+Security alarm (SECURITY) and security audit (SECURITY) on , system id: 65534
+Auditable event:        System UAF record modification
+Event time:             10-MAY-2022 13:25:15.50
+PID:                    0000010C        
+Username:               SYSTEM          
+Image name:             DKA0:[SYS0.SYSCOMMON.][SYSEXE]AUTHORIZE.EXE
+Object name:            SYS$COMMON:[SYSEXE]SYSUAF.DAT;1
+Object type:            file
+User record modified:   FIELD
+Fields modified:        FLAGS
+```
+
+Once both accounts are disabled, you can `exit` UAF.
+
+### Initializing queues
+
+Our next set of OPCOM error messages come from the `JOB_CONTROL`
+user:
+
+```
+%%%%%%%%%%%  OPCOM  10-MAY-2022 12:42:36.48  %%%%%%%%%%%
+Message from user JOB_CONTROL
+%JBC-E-OPENERR, error opening SYS$COMMON:[SYSEXE]QMAN$MASTER.DAT;
+
+%%%%%%%%%%%  OPCOM  10-MAY-2022 12:42:36.48  %%%%%%%%%%%
+Message from user JOB_CONTROL
+-RMS-E-FNF, file not found
+```
+
+These concern the queue manager, which currently has no queue
+database. We can remedy this by starting the queue manager
+manually and instructing it to create a new database file:
+
+```DCL
+START/QUEUE/MANAGER/NEW_VERSION
+```
+
+...after which you should see the following OPCOM message:
+
+```
+%%%%%%%%%%%  OPCOM  10-MAY-2022 14:23:30.45  %%%%%%%%%%%
+Message from user JOB_CONTROL
+%JBC-I-CREATED,  created
+```
+
+Now that `QMAN$MASTER.DAT` has been created, you should
+no longer job control error messages during the startup
+process.
+
+### Creating a DECdtm transaction log
+
+The last OPCOM message to resolve is a warning from `SYSTEM`:
+
+```
+%%%%%%%%%%%  OPCOM  10-MAY-2022 14:28:04.29  %%%%%%%%%%%
+Message from user SYSTEM
+Warning: DECdtm log file not found (SYS$JOURNAL:SYSTEM$.LM$JOURNAL)
+        %RMS-E-FNF, file not found
+        TP server process waiting
+```
+
+DECdtm is a Distributed Transaction Manager designed mainly to
+help ensure integrity and consistency of transactions between
+multiple resources, especially in VAX cluster environments. In
+order for DECdtm and applications using it (such as Rdb) to
+function properly, DECdtm requires a log file to record
+transactions to, named `SYS$JOURNAL:SYSTEM$node.LM$JOURNAL`
+where `node` corresponds to the name of your VAX, in our case
+`BOSTON`.
+
+We can create a transaction log using the Log Manager Control
+Program `LCMP`, run using the following command:
+```
+RUN SYS$SYSTEM:LCMP
+```
+After which you will see an `LCMP>` prompt.
+
+From here, you can create the file with the command:
+```
+CREATE LOG SYS$JOURNAL:SYSTEM$BOSTON.LM$JOURNAL
+```
+
+Once the log file is created, `REBOOT` the VAX.
