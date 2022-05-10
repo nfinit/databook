@@ -10,6 +10,33 @@ making it a reasonable choice.
 For this guide, we will be using a simulated VAXstation 4000 VLC in a headless
 configuration.
 
+### Preparation (networking only)
+
+It's likely you will be using your VAX on the network in some way, in which case
+you will want to consider how you expect to address it. In particular, you'll
+want to prepare with:
+* A *maximum* six character long hostname that will be used to identify the VAX
+* *If installing TCP/IP services*: a static IP address you intend to assign to
+  the VAX on your network
+* A DECnet address consisting of an area number and a node number. DECnet
+  addressing supports an area number range of 1-63 and a node range of 1-1023.
+  If you are installing TCP/IP on your VAX, it's recommended to also use the 
+  last octet of its static IP as its DECnet node number.
+* A system ID computed from the DECnet address using the formula `A * 1024 + N`
+  where `A` and `N` correspond to DECnet area and node numbers, respectively.
+  
+Thus, we end up with:
+
+| Attribute           | Value       |
+|---------------------|-------------|
+| Hostname            | `BOSTON`    |
+| TCP/IP address      | `10.0.0.40` |
+| DECnet address      | `1.40`      |
+| System ID           | `1064`      |
+
+If you don't intend to network your VAX, you can ignore this information, as well
+as anything further related to networking (including clustering).
+
 ### Initial boot
 
 After booting the VAX, the display/console will show a boot string:
@@ -78,9 +105,9 @@ console and change or otherwise manually boot from the hard disk. Recall that
 our VAX hard disk is `DKA0`.
 
 After booting the newly imaged hard disk, the system will begin the installation 
-process by asking for a label for the system volume. If you intend to join your
-VAX to a cluster in the future, a unique label (for example in the format
-`[nodename]$SYS`) will be worthwhile, otherwise you leave it to the default.
+process by asking for a label for the system volume. A unique name is necessary
+if you wish to use the system in a cluster in the future, so we will choose
+`BOSTON$SYS` for this VAX.
 
 The installation procedure will then ask for the name of the drive hosting 
 the distribution media, which in our case is `DKA100`. 
@@ -90,8 +117,16 @@ For optional libraries and software, we can select all options, or ignore
 DECwindows-related content if your VAX is expected to run headless.
 
 Once the optional software installation is completed, the installation
-procedure will ask if the system will be part of a cluster. 
-For the moment, we will answer no.
+procedure will ask if the system will be part of a cluster. We will answer
+`Y` to this in order to install DECnet and gain the option to join a
+cluster in the future if desired.
+
+The installation procedure will now ask you for some of the parameters you've
+prepared, in particular the VAX's node name (`BOSTON`) and node address (`1.40`).
+You will then be asked whether ethernet will be used for cluster communications,
+to which you can answer `Y`. Since we are (likely) not joining this system to any
+existing clusters, you can provide `1` for the cluster number and a password of
+your choosing. We will also not be using our VAX as a disk server.
 
 The installation procedure will now begin setting up the `SYSTEM`, `SYSTEST` 
 and `FIELD` accounts. Provide an appropriate password for at least `SYSTEM`, 
