@@ -362,7 +362,7 @@ Now that `QMAN$MASTER.DAT` has been created, you should
 no longer job control error messages during the startup
 process.
 
-### Creating a DECdtm transaction log
+### Disabling DECdtm
 
 The last OPCOM message to resolve is a warning from `SYSTEM`:
 
@@ -380,8 +380,7 @@ multiple resources, especially in VAX cluster environments. In
 order for DECdtm and applications using it (such as Rdb) to
 function properly, DECdtm requires a log file to record
 transactions to, named `SYS$JOURNAL:SYSTEM$node.LM$JOURNAL`
-where `node` corresponds to the name of your VAX, in our case
-`BOSTON`.
+where `node` corresponds to the DECnet node name of your VAX.
 
 We can create a transaction log using the Log Manager Control
 Program `LCMP`, run using the following command:
@@ -392,7 +391,7 @@ After which you will see an `LCMP>` prompt.
 
 From here, you can create the file with the command:
 ```
-CREATE LOG SYS$JOURNAL:SYSTEM$BOSTON.LM$JOURNAL
+CREATE LOG SYS$JOURNAL:SYSTEM$[node].LM$JOURNAL
 ```
 
 Once the log file is created, `REBOOT` the VAX.
