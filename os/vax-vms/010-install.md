@@ -2,27 +2,13 @@ Installing VAX/VMS 5.5
 --------------------------------------------------------------------------------
 
 This guide covers a basic installation of VAX/VMS 5.5, the last VAX-only version
-of VMS contemporary to the last and fastest generation of VAX systems produced
-before the platform was eclipsed by the new Alpha RISC machines to which VMS
-was soon ported. VMS 5.x, rather than being historically "proper" for many
-of the more desirable VAXen among hobbyists, also has a rather rich base
-of first-party software available, making it a reasonable choice.
+of VMS contemporary to the last and fastest new generation of VAX systems. 
+VMS 5.x, not only historically "proper" for many of the more desirable VAXen 
+among hobbyists, also has a rather rich base of first-party software available, 
+making it a reasonable choice.
 
-### Preparation
-
-The VAX/VMS installation process is guided and generally straightforward, but
-before starting, you will need to know a few things about your system:
-* The name of your installation device (CD-ROM, tape, etc.)
-* The name of your target device to which VMS will be installed (hard disk)
-* A *maximum* six character long hostname that will be used to identify the VAX
-
-For our simulated VAXstation 4000 VLC, we use the following parameters:
-
-| Attribute           | Value       |
-|---------------------|-------------|
-| Installation device | `DKA100`    |
-| Target device       | `DKA0`      |
-| Hostname            | `BOSTON`    |
+For this guide, we will be using a simulated VAXstation 4000 VLC in a headless
+configuration.
 
 ### Initial boot
 
@@ -92,18 +78,16 @@ console and change or otherwise manually boot from the hard disk. Recall that
 our VAX hard disk is `DKA0`.
 
 After booting the newly imaged hard disk, the system will begin the installation 
-process by asking for a label for the system volume it's worthwhile to give your 
-system a unique volume label if you would like to configure it as part of a 
-cluster. For BOSTON, the *volume label* is `BOSTON$SYS`.
+process by asking for a label for the system volume. If you intend to join your
+VAX to a cluster in the future, a unique label (for example in the format
+`[nodename]$SYS`) will be worthwhile, otherwise you leave it to the default.
 
 The installation procedure will then ask for the name of the drive hosting 
-the distribution media, in BOSTON's case this is `DKA100`. 
+the distribution media, which in our case is `DKA100`. 
 The media is ready to be mounted.
 
-For optional libraries and software, we will select all available options
-except anything relating to DECwindows, since BOSTON is running as a
-headless system and does not need a graphical environment. After a few 
-confirmation steps, the system will begin installing the selected options.
+For optional libraries and software, we can select all options, or ignore
+DECwindows-related content if your VAX is expected to run headless.
 
 Once the optional software installation is completed, the installation
 procedure will ask if the system will be part of a cluster. 
