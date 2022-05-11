@@ -23,6 +23,7 @@ VAX ecosystem.
 ## System installation and basic use
 
 * [Installing VAX/VMS 5.5](010-install.md)
+* [The basic VMS 5.5 environment](011-intro.md)
 
 ## Applications
 
