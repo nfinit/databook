@@ -409,7 +409,7 @@ $! Site-specific logicals:
 $  DEFINE/SYSTEM/EXEC SYS$DECDTM_INHIBIT yes
 ```
 Then press `CTRL-Z` to exit and save. `REBOOT` your
-VAX and, and enjoy an error-free boot:
+VAX and enjoy an error-free startup:
 
 ```
 -DKA0
@@ -459,7 +459,7 @@ The VAX/VMS system is now executing the site-specific startup commands.
   Direct I/O count:               477         Peak page file size:      3262
   Page faults:                   2850         Mounted volumes:             0
   Charged CPU time:           0 00:00:02.14   Elapsed time:     0 00:00:16.99
-  ```
+```
 
 ### Other resources
 
