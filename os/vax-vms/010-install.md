@@ -461,6 +461,13 @@ The VAX/VMS system is now executing the site-specific startup commands.
   Charged CPU time:           0 00:00:02.14   Elapsed time:     0 00:00:16.99
 ```
 
+--------------------------------------------------------------------------------
+
+Now that your VAX is up and running, you can continue on to the 
+[intro](011-intro.md) to the basic VMS environment.
+
+--------------------------------------------------------------------------------
+
 ### Other resources
 
 Some of this process was outlined with the help of the official documentation
