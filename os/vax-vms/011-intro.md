@@ -4,7 +4,8 @@ The basic VAX/VMS 5.5 environment
 This guide assumes your VAX has been freshly set up with VAX/VMS 5.5-2H4 
 similarly to our example system in the [installation guide](010-install.md), 
 which is now cleanly set up to the point that it boots warning-free but lacks 
-any kind ofessential application software, networking or further configuration.
+any kind of essential application software, networking or further 
+configuration.
 
 ### DCL: the VMS shell
 
