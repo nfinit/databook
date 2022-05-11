@@ -20,7 +20,7 @@ VAX ecosystem.
 
 * [VAX/VMS quick reference](000-quickref.md)
 
-## System installation
+## System installation and basic use
 
 * [Installing VAX/VMS 5.5](010-install.md)
 
