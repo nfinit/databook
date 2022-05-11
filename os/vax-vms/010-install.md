@@ -7,35 +7,7 @@ VMS 5.x, not only historically "proper" for many of the more desirable VAXen
 among hobbyists, also has a rather rich base of first-party software available, 
 making it a reasonable choice.
 
-For this guide, we will be using a simulated VAXstation 4000 VLC in a headless
-configuration.
-
-### Preparation (networking only)
-
-It's likely you will be using your VAX on the network in some way, in which case
-you will want to consider how you expect to address it. In particular, you'll
-want to prepare with:
-* A *maximum* six character long hostname that will be used to identify the VAX
-* *If installing TCP/IP services*: a static IP address you intend to assign to
-  the VAX on your network
-* A DECnet address consisting of an area number and a node number. DECnet
-  addressing supports an area number range of 1-63 and a node range of 1-1023.
-  If you are installing TCP/IP on your VAX, it's recommended to also use the 
-  last octet of its static IP as its DECnet node number.
-* A system ID computed from the DECnet address using the formula `A * 1024 + N`
-  where `A` and `N` correspond to DECnet area and node numbers, respectively.
-  
-Thus, we end up with:
-
-| Attribute           | Value       |
-|---------------------|-------------|
-| Hostname            | `BOSTON`    |
-| TCP/IP address      | `10.0.0.40` |
-| DECnet address      | `1.40`      |
-| System ID           | `1064`      |
-
-If you don't intend to network your VAX, you can ignore this information, as well
-as anything further related to networking (including clustering).
+For this guide, we will be using a simulated VAXstation 4000 VLC.
 
 ### Initial boot
 
@@ -45,7 +17,9 @@ KA48-A V1.2-32B-V4.0
 ```
 And begin a long memory test. During this process, issue a **break** and
 you will soon be dropped into the console, with a `>>>` prompt showing on 
-the screen.
+the screen. Alternately, if you're using a simulated system, you can probably
+just wait for the prompt to appear automatically as it will fail some self
+tests due to inaccurate emulation.
 
 From here, you can now find the boot device hosting the VMS install media by
 issuing the command:
@@ -105,9 +79,10 @@ console and change or otherwise manually boot from the hard disk. Recall that
 our VAX hard disk is `DKA0`.
 
 After booting the newly imaged hard disk, the system will begin the installation 
-process by asking for a label for the system volume. A unique name is necessary
-if you wish to use the system in a cluster in the future, so we will choose
-`BOSTON$SYS` for this VAX.
+process by asking for a label for the system volume. A unique name is recommended
+if you are joining a cluster, but otherwise the default will suffice. If you
+expect to install networking later and have a node name ready for your VAX,
+using the format `<nodename>$SYS` is a good idea.
 
 The installation procedure will then ask for the name of the drive hosting 
 the distribution media, which in our case is `DKA100`. 
@@ -118,15 +93,7 @@ DECwindows-related content if your VAX is expected to run headless.
 
 Once the optional software installation is completed, the installation
 procedure will ask if the system will be part of a cluster. We will answer
-`Y` to this in order to install DECnet and gain the option to join a
-cluster in the future if desired.
-
-The installation procedure will now ask you for some of the parameters you've
-prepared, in particular the VAX's node name (`BOSTON`) and node address (`1.40`).
-You will then be asked whether ethernet will be used for cluster communications,
-to which you can answer `Y`. Since we are (likely) not joining this system to any
-existing clusters, you can provide `1` for the cluster number and a password of
-your choosing. We will also not be using our VAX as a disk server.
+`N` to this question.
 
 The installation procedure will now begin setting up the `SYSTEM`, `SYSTEST` 
 and `FIELD` accounts. Provide an appropriate password for at least `SYSTEM`, 
@@ -135,7 +102,7 @@ disabled when setup is complete.
 
 After account setup is complete, the installation procedure will ask if you
 have any Product Authorization Keys to register. We will do this afterwards,
-so you can answer no.
+so you can answer `N`.
 
 Finally, the system will reboot.
 
@@ -381,7 +348,7 @@ Now that `QMAN$MASTER.DAT` has been created, you should
 no longer job control error messages during the startup
 process.
 
-### Disabling DECdtm
+### Dealing with DECdtm
 
 The last OPCOM message to resolve is a warning from `SYSTEM`:
 
@@ -395,14 +362,18 @@ Warning: DECdtm log file not found (SYS$JOURNAL:SYSTEM$.LM$JOURNAL)
 
 DECdtm is a Distributed Transaction Manager designed mainly to
 help ensure integrity and consistency of transactions between
-multiple resources, especially in VAX cluster environments. In
-order for DECdtm and applications using it (such as Rdb) to
-function properly, DECdtm requires a log file to record
-transactions to, named `SYS$JOURNAL:SYSTEM$node.LM$JOURNAL`
-where `node` corresponds to the DECnet node name of your VAX.
+multiple resources, especially in VAX cluster environments. It
+is mainly used by DEC's first-party database solutions on VMS
+like Rdb and DBMS, and requires a transaction log file in order 
+to properly function, which it will search for every 15 minutes 
+while active.
 
-We can create a transaction log using the Log Manager Control
-Program `LCMP`, run using the following command:
+#### For a networked VAX: preparing a log file
+
+If you expect to install DECnet networking on your VAX and know
+what its node name will be, you can prepare DECdtm by creating a log 
+file using the Log Manager Control Program `LCMP`, run using 
+the command:
 ```
 RUN SYS$SYSTEM:LCMP
 ```
@@ -412,5 +383,86 @@ From here, you can create the file with the command:
 ```
 CREATE LOG SYS$JOURNAL:SYSTEM$[node].LM$JOURNAL
 ```
+With the log file created, things should start working once
+DECnet is installed on your VAX and a node name is assigned.
 
-Once the log file is created, `REBOOT` the VAX.
+#### For a non-networked VAX: disabling DECdtm
+
+If you don't intend to attach your VAX to a network or run any
+database management systems, you can simply disable DECdtm
+by defining the `SYS$DECDTM_INHIBIT` logical name to any
+string in `SYS$MANAGER:SYLOGICALS.COM`. This will keep the
+server from starting next time the VAX is rebooted.
+
+For the time being, we will disable DECdtm and simply
+re-enable it once DECnet is installed. We will start by
+editing `SYLOGICALS.COM` with the command:
+```
+EDIT/TPU SYS$MANAGER:SYLOGICALS.COM
+```
+...which brings up the EVE editor, that is fairly easy
+to work with as a novice. Use the arrow keys to navigate 
+to the bottom just before the `EXIT` command and subsequent
+definition of the `DEFINE_NAME` subroutine and add the lines:
+```
+$! Site-specific logicals:
+$  DEFINE/SYSTEM/EXEC SYS$DECDTM_INHIBIT yes
+```
+Then press `CTRL-Z` to exit and save. `REBOOT` your
+VAX and, and enjoy an error-free boot:
+
+```
+-DKA0
+   VAX/VMS Version V5.5-2H4 Major version id = 1 Minor version id = 0
+
+$!  Copyright (c) 1993 Digital Equipment Corporation.  All rights reserved.
+
+%STDRV-I-STARTUP, VMS startup begun at 11-MAY-2022 14:27:03.04
+
+The VAX/VMS system is now executing the system startup procedure.
+
+%%%%%%%%%%%  OPCOM  11-MAY-2022 14:27:14.91  %%%%%%%%%%%
+Operator _OPA0: has been enabled, username SYSTEM
+
+%%%%%%%%%%%  OPCOM  11-MAY-2022 14:27:14.91  %%%%%%%%%%%
+Operator status for operator _OPA0:
+CENTRAL, PRINTER, TAPES, DISKS, DEVICES, CARDS, NETWORK, CLUSTER, SECURITY,
+LICENSE, OPER1, OPER2, OPER3, OPER4, OPER5, OPER6, OPER7, OPER8, OPER9, OPER10,
+OPER11, OPER12
+
+%%%%%%%%%%%  OPCOM  11-MAY-2022 14:27:14.93  %%%%%%%%%%%
+Logfile has been initialized by operator _OPA0:
+Logfile is SYS$SYSROOT:[SYSMGR]OPERATOR.LOG;8
+
+%%%%%%%%%%%  OPCOM  11-MAY-2022 14:27:14.93  %%%%%%%%%%%
+Operator status for operator SYS$SYSROOT:[SYSMGR]OPERATOR.LOG;8
+CENTRAL, PRINTER, TAPES, DISKS, DEVICES, CARDS, NETWORK, CLUSTER, SECURITY,
+LICENSE, OPER1, OPER2, OPER3, OPER4, OPER5, OPER6, OPER7, OPER8, OPER9, OPER10,
+OPER11, OPER12
+
+%%%%%%%%%%%  OPCOM  11-MAY-2022 14:27:15.13  %%%%%%%%%%%
+Message from user AUDIT$SERVER
+Security alarm (SECURITY) and security audit (SECURITY), system id: 65534
+Auditable event:        Audit server starting up
+Event time:             11-MAY-2022 14:27:15.11
+
+%SET-I-NEWAUDSRV, identification of new audit server process is 00000108
+
+The VAX/VMS system is now executing the site-specific startup commands.
+
+%SET-I-INTSET, login interactive limit = 64, current interactive value = 0
+  11-MAY-2022 14:27:17
+  SYSTEM       job terminated at 11-MAY-2022 14:27:19.96
+
+  Accounting information:
+  Buffered I/O count:             836         Peak working set size:     662
+  Direct I/O count:               477         Peak page file size:      3262
+  Page faults:                   2850         Mounted volumes:             0
+  Charged CPU time:           0 00:00:02.14   Elapsed time:     0 00:00:16.99
+  ```
+
+### Other resources
+
+Some of this process was outlined with the help of the official documentation
+*Guide to Setting Up a VMS System*, which outlines some of the template scripts
+such as `SYLOGICALS.COM`.
