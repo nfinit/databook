@@ -71,154 +71,38 @@ list of files in your current directory, which in VMS is known as the
 You may also notice that your `DIR` command actually produced a listing
 for *two* directories, that's because your starting default directory
 is not an actual directory but a *logical name* pointing to a "search
-list" of two separate directories:
+list" of two separate directories. Logical names are a powerful feature
+of VMS used similarly to environment variables on Unix and Windows, and
+we will discuss them a bit more later. For now, let's continue on
+with system navigation.
+
+You may have noticed that VMS does not recognize the Unix/Windows staple
+`cd` command for changing directories, nor is there an obvious counterpart.
+In VMS, you instead use the `SET` command to set a new default directory, in
+the format `SET DEFAULT <directory>`.
+
+VMS directory notation is a bit different from any major modern operating
+system, taking the format '[directory.subdirectory]' with an optional
+'DEVICE:' prefix similar to what is found on MS-DOS or Windows. Thus,
+if we want to change our default directory to the root of our system disk
+`DKA0`, we will issue the command:
 
 ```
-$ SHOW LOGICAL SYS$SYSROOT
-   "SYS$SYSROOT" = "DKA0:[SYS0.]" (LNM$SYSTEM_TABLE)
-	= "SYS$COMMON:"
-1  "SYS$COMMON" = "DKA0:[SYS0.SYSCOMMON.]" (LNM$SYSTEM_TABLE)
+SET DEFAULT DKA0:[000000]
+```
+
+`[000000]` is a special directory indiciating the root (highest level)
+directory of a device. Running a `DIR` command now gives us the following:
+
+```
+$ DIR
+
+Directory DKA0:[000000]
+
+000000.DIR;1        BACKUP.SYS;1        BADBLK.SYS;1        BADLOG.SYS;1       
+BITMAP.SYS;1        CONTIN.SYS;1        CORIMG.SYS;1        INDEXF.SYS;1       
+SYS0.DIR;1          SYSEXE.DIR;1        VMS$COMMON.DIR;1    VOLSET.SYS;1       
+
+Total of 12 files.
 $ 
 ```
-
-The `SHOW` command demonstrated above can be used to get the
-value of any logical name along with a lot of other system variables,
-such as for example your current default directory:
-
-```
-$ SHOW DEFAULT
-  SYS$SYSROOT:[SYSMGR]
-  =   SYS$SYSROOT:[SYSMGR]
-  =   SYS$COMMON:[SYSMGR]
-$ 
-```
-
-...or your current user (or any other) process:
-
-```
-$ SHOW PROCESS
-
-11-MAY-2022 16:47:32.49   User: SYSTEM           Process ID:   00000113
-                                                  Process name: "SYSTEM"
-
-Terminal:           OPA0:
-User Identifier:    [SYSTEM]
-Base priority:      4
-Default file spec:  SYS$SYSROOT:[SYSMGR]
-
-Devices allocated:  OPA0:
-$ 
-```
-
-...or *all* logical names currently defined on your VAX:
-
-```
-$ SHOW LOGICAL
-
-(LNM$PROCESS_TABLE)
-
-  "SYS$COMMAND" = "_OPA0:"
-  "SYS$DISK" = "SYS$SYSROOT:"
-  "SYS$ERROR" = "_OPA0:"
-  "SYS$INPUT" = "_OPA0:"
-  "SYS$OUTPUT" [super] = "_OPA0:"
-  "SYS$OUTPUT" [exec] = "_OPA0:"
-  "TT" = "OPA0:"
-
-(LNM$JOB_809D7A50)
-
-  "SYS$LOGIN" = "SYS$SYSROOT:[SYSMGR]"
-  "SYS$LOGIN_DEVICE" = "SYS$SYSROOT:"
-  "SYS$SCRATCH" = "SYS$SYSROOT:[SYSMGR]"
-
-(LNM$GROUP_000001)
-
-(LNM$SYSTEM_TABLE)
-
-  "$CONSOLE" = "_OPA0:"
-  "$DISK1" = "_DKA0:"
-  "$TERMINAL0" = "_TTA0:"
-  "$TERMINAL1" = "_TTA1:"
-  "$TERMINAL2" = "_TTA2:"
-  "ACP$BADBLOCK_MBX" = "MBA4:"
-  "AGEN$IMAGES" = "SYS$MANAGER:VMS$IMAGES_MASTER.DAT"
-  "DBG$INPUT" = "SYS$INPUT:"
-  "DBG$OUTPUT" = "SYS$OUTPUT:"
-  "DISK$BOSTON$SYS" = "DKA0:"
-  "LIB$DT_FORMAT" = "LIB$DATE_FORMAT_001"
-	= "LIB$TIME_FORMAT_001"
-  "LIB$DT_INPUT_FORMAT" = "!DB-!MAAU-!Y4 !H04:!M0:!S0.!C2"
-  "LMF$CHARGE_TABLE" = "SYS$COMMON:[SYSEXE]LMF$LURT.DAT"
-  "LMF$LICENSE" = "SYS$COMMON:[SYSEXE]LMF$LICENSE.LDB"
-  "MTHRTL" = "SYS$SHARE:UVMTHRTL.EXE"
-  "OPC$OPCOM_STARTED" = "TRUE"
-  "STARTUP$PHASES" = "SYS$STARTUP:VMS$PHASES.DAT"
-  "STARTUP$STARTUP_LAYERED" = "SYS$STARTUP:VMS$LAYERED.DAT"
-  "STARTUP$STARTUP_LIST" = "STARTUP$STARTUP_VMS"
-	= "STARTUP$STARTUP_LAYERED"
-  "STARTUP$STARTUP_VMS" = "SYS$STARTUP:VMS$VMS.DAT"
-  "SYS$ANNOUNCE" = ".Welcome to VAX/VMS V5.5-2H4"
-  "SYS$COMMON" = "DKA0:[SYS0.SYSCOMMON.]"
-  "SYS$DECDTM_INHIBIT" = "YES"
-  "SYS$DECDTM_NODE_ADDRESS" = "0"
-  "SYS$DECDTM_NODE_NAME" = " "
-  "SYS$DISK" = "DKA0:"
-  "SYS$ERRORLOG" = "SYS$SYSROOT:[SYSERR]"
-  "SYS$EXAMPLES" = "SYS$SYSROOT:[SYSHLP.EXAMPLES]"
-  "SYS$HELP" = "SYS$SYSROOT:[SYSHLP]"
-  "SYS$INSTRUCTION" = "SYS$SYSROOT:[SYSCBI]"
-  "SYS$JOURNAL" = "SYS$COMMON:[SYSEXE]"
-  "SYS$LANGUAGE" = "ENGLISH"
-  "SYS$LIBRARY" = "SYS$SYSROOT:[SYSLIB]"
-  "SYS$LOADABLE_IMAGES" = "SYS$SYSROOT:[SYS$LDR]"
-  "SYS$MAINTENANCE" = "SYS$SYSROOT:[SYSMAINT]"
-  "SYS$MANAGER" = "SYS$SYSROOT:[SYSMGR]"
-  "SYS$MESSAGE" = "SYS$SYSROOT:[SYSMSG]"
-  "SYS$MICROVAX" = "1"
-  "SYS$PS_FONT_METRICS" = "SYS$COMMON:[SYSFONT.PS_FONT_METRICS.USER]"
-	= "SYS$COMMON:[SYSFONT.PS_FONT_METRICS.SYSTEM]"
-  "SYS$SHARE" = "SYS$SYSROOT:[SYSLIB]"
-  "SYS$SPECIFIC" = "DKA0:[SYS0.]"
-  "SYS$STARTUP" = "SYS$SYSROOT:[SYS$STARTUP]"
-	= "SYS$MANAGER"
-  "SYS$SYLOGIN" = "SYS$MANAGER:SYLOGIN"
-  "SYS$SYSDEVICE" = "DKA0:"
-  "SYS$SYSDISK" = "SYS$SYSROOT:"
-  "SYS$SYSROOT" = "DKA0:[SYS0.]"
-	= "SYS$COMMON:"
-  "SYS$SYSTEM" = "SYS$SYSROOT:[SYSEXE]"
-  "SYS$TEST" = "SYS$SYSROOT:[SYSTEST]"
-  "SYS$TOPSYS" = "SYS0"
-  "SYS$UPDATE" = "SYS$SYSROOT:[SYSUPD]"
-  "TPU$DEFAULTS" = "SYS$LIBRARY:EVE"
-  "TPU$JOURNAL" = "SYS$SCRATCH:"
-  "TPU$SECTION" = "EVE$SECTION"
-
-(DECW$LOGICAL_NAMES)
-
-  "CDA$LIBRARY" = "SYS$COMMON:[CDA$LIBRARY]"
-  "DECW$EXAMPLES" = "SYS$COMMON:[SYSHLP.EXAMPLES.DECW]"
-  "DECW$INCLUDE" = "SYS$COMMON:[DECW$INCLUDE]"
-  "DECW$SYSCOMMON" = "SYS$COMMON"
-  "DECW$SYSTEM_DEFAULTS" = "SYS$COMMON:[DECW$DEFAULTS.USER]"
-	= "SYS$COMMON:[DECW$DEFAULTS.SYSTEM]"
-	= "SYS$LIBRARY:"
-  "DECW$USER_DEFAULTS" = "SYS$LOGIN:"
-  "DECW$XLIBERRDB" = "SYS$MESSAGE:DECW$XLIBERRDB.DAT"
-  "UIL$INCLUDE" = "DECW$INCLUDE"
-  "XDPS$EXAMPLES" = "SYS$SYSROOT:[SYSHLP.EXAMPLES.XDPS]"
-  "XDPS$INCLUDE" = "SYS$SYSROOT:[XDPS$INCLUDE]"
-$
-```
-
-...and much more.
-
-Our final demonstration of `SHOW` also demonstrates the power of logical
-names and their pervasive usage throughout VMS to define all kinds of
-variables, such as `SYS$DECDTM_INHIBIT` which you may have previously
-defined to disable DECdtm and its transaction log warnings at startup.
-
-The use of logical names over raw paths and similar settings allows DCL
-scripts and VMS software in general to be generally more portable over
-a wider variety of system configurations, and are similar to environment
-variables in Unix or Windows.
