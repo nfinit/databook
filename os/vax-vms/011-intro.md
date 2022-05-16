@@ -120,8 +120,7 @@ files, all created by VMS to help manage the volume:
 * `BITMAP.SYS`: The bitmap file, keeping track of available space on the
                 volume and helps optimize its usage.
 * `CONTIN.SYS`: The continuation file, used to keep track of files that
-                extend across multiple volumes bound together as a "volume
-                set".
+                extend across multiple volumes in a "volume set".
 * `CORIMG.SYS`: The core image file, not used by the operating system.
 * `INDEXF.SYS`: The index file, recording the headers of every file on the
                 volume.
