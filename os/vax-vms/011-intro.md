@@ -134,3 +134,20 @@ Also present in the master directory are a number of subdirectories:
 * `SYS0`: Operating system files
 * `SYSEXE`: Stores only the boot program (`SYSBOOT.EXE`) and `INSTALL.KIT`.
 * `VMS$COMMON`: Common cluster files
+
+Of particular interest is the `SYS0` directory:
+
+```
+$ SET DEFAULT [.SYS0]
+$ DIR
+
+Directory DKA0:[000000.SYS0]
+
+MOM$SYSTEM.DIR;1    SYS$LDR.DIR;1       SYS$STARTUP.DIR;1   SYSCBI.DIR;1       
+SYSCOMMON.DIR;1     SYSERR.DIR;1        SYSEXE.DIR;1        SYSHLP.DIR;1       
+SYSLIB.DIR;1        SYSMAINT.DIR;1      SYSMGR.DIR;1        SYSMSG.DIR;1       
+SYSTEST.DIR;1       SYSUPD.DIR;1        
+
+Total of 14 files.
+$ 
+```
