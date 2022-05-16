@@ -116,7 +116,7 @@ files, all created by VMS to help manage the volume:
 * `BADBLK.SYS`: The bad block file, recording bad blocks on the volume 
                 to keep the system from attempting to use them. 
 * `BADLOG.SYS`: The pending bad block file, recording *suspected* bad 
-                blocks on the volume that have not yet made it to `BADBLK.SYS`.
+                blocks on the volume.
 * `BITMAP.SYS`: The bitmap file, keeping track of available space on the
                 volume and helps optimize its usage.
 * `CONTIN.SYS`: The continuation file, used to keep track of files that
@@ -133,5 +133,5 @@ Also present in the master directory are a number of subdirectories:
 
 * `000000`: The master directory itself
 * `SYS0`: Operating system files
-* `SYSEXE`: Boot program (`SYSBOOT.EXE`) directory
+* `SYSEXE`: Stores only the boot program (`SYSBOOT.EXE`) and `INSTALL.KIT`.
 * `VMS$COMMON`: Common cluster files
