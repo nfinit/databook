@@ -1,4 +1,4 @@
-The basic VAX/VMS 5.5 environment
+The VAX/VMS 5.5 environment
 --------------------------------------------------------------------------------
 
 This guide assumes your VAX has been freshly set up with VAX/VMS 5.5-2H4 
@@ -91,8 +91,8 @@ if we want to change our default directory to the root of our system disk
 SET DEFAULT DKA0:[000000]
 ```
 
-`[000000]` is a special directory indiciating the root (highest level)
-directory of a device. Running a `DIR` command now gives us the following:
+`[000000]` is is the *master file directory*, also known as the top or
+root directory of a given volume.
 
 ```
 $ DIR
@@ -106,3 +106,32 @@ SYS0.DIR;1          SYSEXE.DIR;1        VMS$COMMON.DIR;1    VOLSET.SYS;1
 Total of 12 files.
 $ 
 ```
+
+### Directories and files
+
+The master directory of the system disk contains a number of `.SYS`
+files, all created by VMS to help manage the volume:
+
+* `BACKUP.SYS`: The volume backup log file
+* `BADBLK.SYS`: The bad block file, recording bad blocks on the volume 
+                to keep the system from attempting to use them. 
+* `BADLOG.SYS`: The pending bad block file, recording *suspected* bad 
+                blocks on the volume that have not yet made it to `BADBLK.SYS`.
+* `BITMAP.SYS`: The bitmap file, keeping track of available space on the
+                volume and helps optimize its usage.
+* `CONTIN.SYS`: The continuation file, used to keep track of files that
+                extend across multiple volumes bound together as a "volume
+                set".
+* `CORIMG.SYS`: The core image file, not used by the operating system.
+* `INDEXF.SYS`: The index file, recording the headers of every file on the
+                volume.
+* `VOLSET.SYS`: The volume set list file, only present on the first volume
+                in a volume set, which contains a list of all volume labels
+                in the set.
+
+Also present in the master directory are a number of subdirectories:
+
+* `000000`: The master directory itself
+* `SYS0`: Operating system files
+* `SYSEXE`: Boot program (`SYSBOOT.EXE`) directory
+* `VMS$COMMON`: Common cluster files
