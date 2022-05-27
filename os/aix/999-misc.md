@@ -13,13 +13,5 @@ and slowing down compilation.
 
 To suppress this message, you can use the `-qnolm` flag at compilation time, or
 you can edit the VisualAge configuration file `/etc/vac.cfg` to automatically
-use the flag. To do this in Vi, simply open the file and run the following
-substitution command:
-
-```
-:%s/options    = /options    = -qnolm,/g
-```
-
-This should add -qnolm to the flags automatically invoked by each VisualAge
-compiler binary, suppressing the license check and allowing compilation to
-occur without this warning or the associated slowdown.
+use the flag by inserting it into the options line in the "common definitions"
+section towards the end of the file.
